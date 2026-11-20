@@ -1,0 +1,539 @@
+[
+ {
+  "id": "severe-bleeding",
+  "cat": "First aid",
+  "title": "Severe bleeding",
+  "summary": "Heavy bleeding can kill in minutes. Stopping it comes before everything else except your own safety.",
+  "steps": [
+   "Call 911 if phones work, or send someone for help.",
+   "Protect your hands if you can: gloves, or a plastic bag.",
+   "Find where the blood is coming from and press hard directly on the wound with gauze or a clean cloth. Use both hands and lean your body weight into it.",
+   "If blood soaks through, put more cloth on top and keep pressing. Don't lift it to look.",
+   "For a deep wound in the armpit, groin or neck, pack the wound tightly with gauze or cloth, then press hard.",
+   "For an arm or leg that keeps bleeding despite pressure, put a tourniquet 2 to 3 inches above the wound (not on a joint). Tighten until the bleeding stops. It will hurt.",
+   "Write the time the tourniquet went on, on the person's skin or the tourniquet. Don't loosen it; leave that to medical staff.",
+   "Keep the person lying down and warm, and watch for shock."
+  ],
+  "source": "Stop the Bleed (American College of Surgeons and U.S. Department of Homeland Security); U.S. Army FM 4-25.11 First Aid.",
+  "warn": "A belt is a poor tourniquet. Use a commercial tourniquet, or a wide strip of cloth tightened with a stick (windlass) and tied in place.",
+  "emergency": true,
+  "tags": "blood wound cut tourniquet hemorrhage"
+ },
+ {
+  "id": "cpr",
+  "cat": "First aid",
+  "title": "CPR for an adult (hands-only)",
+  "summary": "If someone collapses and isn't breathing normally, chest compressions keep blood moving to the brain until help or an AED arrives.",
+  "steps": [
+   "Tap them and shout. If they don't respond and aren't breathing normally (or only gasping), call 911 and send someone for an AED if there is one.",
+   "Kneel beside them. Put the heel of one hand in the center of the chest, your other hand on top, arms straight.",
+   "Push hard and fast: at least 2 inches deep, 100 to 120 times a minute (the beat of the song \"Stayin' Alive\").",
+   "Let the chest rise all the way between pushes.",
+   "Don't stop until help takes over, an AED is ready, or they start breathing.",
+   "If you're trained, give 2 rescue breaths after every 30 compressions.",
+   "When an AED arrives, turn it on and follow its voice instructions."
+  ],
+  "source": "American Heart Association, Hands-Only CPR.",
+  "warn": "Children and babies need a different technique. Take a CPR class: it's the best preparation there is.",
+  "emergency": true,
+  "tags": "cardiac arrest heart not breathing aed compressions resuscitation"
+ },
+ {
+  "id": "choking",
+  "cat": "First aid",
+  "title": "Choking (adult or child over 1)",
+  "summary": "If they can cough hard, let them cough. If they can't cough, speak or breathe, act now.",
+  "steps": [
+   "Ask: \"Are you choking?\" If they nod and can't speak, tell them you're going to help.",
+   "Give 5 firm back blows between the shoulder blades with the heel of your hand.",
+   "Give 5 abdominal thrusts: stand behind them, put a fist just above the belly button, grab it with your other hand and pull sharply inward and upward.",
+   "Keep alternating 5 back blows and 5 thrusts until the object comes out or they can breathe.",
+   "If they become unresponsive, lower them to the ground, call 911 and start CPR. Look in the mouth for the object before each set of breaths."
+  ],
+  "source": "American Red Cross, Conscious Choking.",
+  "warn": "For pregnant or very large people, use chest thrusts (hands on the center of the chest) instead of abdominal thrusts. Babies need a different technique.",
+  "emergency": true,
+  "tags": "heimlich airway can't breathe food stuck"
+ },
+ {
+  "id": "anaphylaxis",
+  "cat": "First aid",
+  "title": "Severe allergic reaction",
+  "summary": "Anaphylaxis can close the airway within minutes. Signs: trouble breathing, swelling of the face, lips, tongue or throat, hives, dizziness, vomiting.",
+  "steps": [
+   "Call 911.",
+   "If they carry an epinephrine auto-injector (EpiPen or similar), help them use it: press it firmly into the outer thigh (through clothing is fine) and hold as the label says.",
+   "Have them lie down with legs raised, or sit up if that makes breathing easier.",
+   "If symptoms don't improve after 5 to 15 minutes and a second injector is available, give a second dose.",
+   "Be ready to start CPR if they stop breathing normally."
+  ],
+  "source": "American Red Cross; American College of Allergy, Asthma and Immunology.",
+  "emergency": true,
+  "tags": "allergy epipen epinephrine bee sting peanut swelling hives"
+ },
+ {
+  "id": "shock",
+  "cat": "First aid",
+  "title": "Shock",
+  "summary": "Shock means not enough blood is reaching the organs, often after bleeding, burns or serious injury. Signs: pale, cool, clammy skin; fast, weak pulse; fast breathing; confusion; thirst.",
+  "steps": [
+   "Call 911 and treat the cause (for example, stop bleeding).",
+   "Lay the person flat on their back.",
+   "Raise their legs about 12 inches, unless you suspect a head, neck or back injury or broken legs.",
+   "Keep them warm with a blanket or coat, including underneath them.",
+   "Don't give food or drink.",
+   "If they vomit, roll them onto their side."
+  ],
+  "source": "American Red Cross; U.S. Army FM 4-25.11 First Aid.",
+  "tags": "pale clammy faint"
+ },
+ {
+  "id": "burns",
+  "cat": "First aid",
+  "title": "Burns",
+  "summary": "Cool the burn fast, protect it, and know when it needs a doctor.",
+  "steps": [
+   "Stop the burning: smother flames, move away from the heat source.",
+   "Cool the burn under cool (not ice-cold) running water for 10 to 20 minutes.",
+   "Take off rings, watches and tight clothing near the burn before it swells, unless they're stuck to the skin.",
+   "Cover loosely with a sterile non-stick dressing or clean plastic wrap.",
+   "Don't put ice, butter or ointment on a serious burn, and don't pop blisters.",
+   "Get medical help for burns that are large, deep (white, leathery or charred), or on the face, hands, feet, genitals or joints, and for chemical or electrical burns. Watch for shock."
+  ],
+  "source": "American Red Cross, Burns.",
+  "tags": "fire scald hot"
+ },
+ {
+  "id": "hypothermia",
+  "cat": "First aid",
+  "title": "Hypothermia",
+  "summary": "Body temperature dropping too low. Signs: shivering, exhaustion, confusion, fumbling hands, memory loss, slurred speech, drowsiness. In severe cases shivering stops.",
+  "steps": [
+   "Get them into a warm, dry, sheltered place.",
+   "Remove any wet clothing.",
+   "Warm the center of the body first (chest, neck, head and groin) with blankets, dry layers, or skin-to-skin contact under loose, dry layers.",
+   "If they're fully alert, give warm, sweet drinks. No alcohol.",
+   "Once their temperature rises, keep them dry and wrapped, including the head and neck.",
+   "Handle them gently and get medical help. If they have no pulse, start CPR."
+  ],
+  "source": "U.S. Centers for Disease Control and Prevention (CDC), Hypothermia.",
+  "tags": "cold freezing winter"
+ },
+ {
+  "id": "frostbite",
+  "cat": "First aid",
+  "title": "Frostbite",
+  "summary": "Frozen skin and tissue, usually fingers, toes, nose, ears. Signs: white or grayish-yellow skin that feels firm or waxy, and numbness.",
+  "steps": [
+   "Get to a warm place as soon as you can.",
+   "Don't walk on frostbitten feet or toes unless you must.",
+   "Put the area in warm (not hot) water: it should feel comfortable to unaffected skin. Or warm it with body heat, such as an armpit.",
+   "Don't rub or massage it.",
+   "Don't use a heating pad, stove, fire or radiator: numb skin burns easily.",
+   "Get medical care. Treat for hypothermia first if they have both."
+  ],
+  "source": "U.S. Centers for Disease Control and Prevention (CDC), Frostbite.",
+  "warn": "Don't thaw frostbite if it could freeze again before you reach warmth: refreezing does more damage.",
+  "tags": "cold freezing winter"
+ },
+ {
+  "id": "heat",
+  "cat": "First aid",
+  "title": "Heat stroke and heat exhaustion",
+  "summary": "Heat stroke is an emergency. Signs: body temperature 103°F (39.4°C) or higher; hot, red, dry or damp skin; fast, strong pulse; headache; confusion; passing out.",
+  "steps": [
+   "Heat stroke: call 911 right away.",
+   "Move them somewhere cooler.",
+   "Cool them with cool cloths, wet sheets, a cool bath or a fan and water spray.",
+   "Don't give a person with heat stroke anything to drink."
+  ],
+  "source": "U.S. Centers for Disease Control and Prevention (CDC), Heat-Related Illnesses.",
+  "table": {
+   "head": [
+    "Heat exhaustion signs",
+    "What to do"
+   ],
+   "rows": [
+    [
+     "Heavy sweating; cold, pale, clammy skin; fast, weak pulse",
+     "Move to a cool place and loosen clothing"
+    ],
+    [
+     "Nausea or vomiting, cramps, tiredness, dizziness, headache, fainting",
+     "Cool wet cloths or a cool bath; sip water"
+    ],
+    [
+     "Vomiting, getting worse, or lasting over 1 hour",
+     "Get medical help"
+    ]
+   ]
+  },
+  "tags": "hot summer sun temperature"
+ },
+ {
+  "id": "fractures",
+  "cat": "First aid",
+  "title": "Broken bones and splints",
+  "summary": "Keep the injury still to reduce pain and further damage.",
+  "steps": [
+   "Stop any bleeding first.",
+   "Don't try to straighten a badly bent limb. Splint it in the position you found it.",
+   "Use something rigid (board, rolled magazine, sturdy stick) padded with cloth, long enough to reach past the joints above and below the break.",
+   "Tie it with strips of cloth above and below the break, never directly over it.",
+   "Check fingers or toes after tying: if they turn pale or blue, go cold or numb, loosen the ties.",
+   "Put a cold pack wrapped in cloth on the injury for 20 minutes at a time."
+  ],
+  "source": "U.S. Army FM 4-25.11 First Aid; American Red Cross.",
+  "warn": "If you suspect a neck or back injury, don't move the person unless they're in immediate danger.",
+  "tags": "fracture splint sprain bone"
+ },
+ {
+  "id": "snakebite",
+  "cat": "First aid",
+  "title": "Snakebite",
+  "summary": "Most bites need hospital care. Stay calm: panic makes it worse.",
+  "steps": [
+   "Move away from the snake. Don't try to catch or kill it.",
+   "Call 911 or get to a hospital as soon as you can.",
+   "Have the person lie or sit still with the bite below the level of the heart.",
+   "Take off rings, watches and tight clothing near the bite.",
+   "Cover the bite with a clean, dry dressing."
+  ],
+  "source": "U.S. CDC / NIOSH, Venomous Snakes.",
+  "warn": "Don't use a tourniquet, cut the wound, suck out venom, put ice on it, or drink alcohol or caffeine.",
+  "tags": "snake bite venom rattlesnake"
+ },
+ {
+  "id": "stroke",
+  "cat": "First aid",
+  "title": "Stroke: think F.A.S.T.",
+  "summary": "A stroke needs a hospital fast. Treatment works best in the first few hours.",
+  "steps": [
+   "Face: ask them to smile. Does one side droop?",
+   "Arms: ask them to raise both arms. Does one drift down?",
+   "Speech: ask them to repeat a simple sentence. Is it slurred or strange?",
+   "Time: if you see any of these, call 911 now and note the time the symptoms started."
+  ],
+  "source": "American Stroke Association.",
+  "tags": "brain face droop slurred"
+ },
+ {
+  "id": "boil-water",
+  "cat": "Water",
+  "title": "Boiling water",
+  "summary": "Boiling is the most reliable way to kill germs in water.",
+  "steps": [
+   "If the water is cloudy, let it settle, then filter it through a clean cloth, paper towel or coffee filter.",
+   "Bring it to a rolling boil for 1 minute.",
+   "Above 6,500 feet (about 2,000 m), boil for 3 minutes.",
+   "Let it cool, then store it in clean, covered containers.",
+   "To improve the flat taste, pour it back and forth between two clean containers, or add a pinch of salt per quart."
+  ],
+  "source": "U.S. Centers for Disease Control and Prevention (CDC), Making Water Safe in an Emergency.",
+  "warn": "Boiling doesn't remove chemicals, fuel or toxins. Don't use water that smells of fuel or chemicals.",
+  "tags": "purify drinking germs"
+ },
+ {
+  "id": "bleach-water",
+  "cat": "Water",
+  "title": "Disinfecting water with bleach",
+  "summary": "When you can't boil, plain household bleach makes clear water safe to drink.",
+  "steps": [
+   "Use regular unscented chlorine bleach. Not scented, color-safe, or bleach with added cleaners.",
+   "Check the label for the strength: usually 6% or 8.25% sodium hypochlorite.",
+   "If the water is cloudy, filter it first, or use twice the amount in the table.",
+   "Add the drops, stir, and let it stand for 30 minutes.",
+   "It should have a slight chlorine smell. If not, repeat the dose and wait another 15 minutes."
+  ],
+  "source": "U.S. Environmental Protection Agency (EPA), Emergency Disinfection of Drinking Water; CDC.",
+  "table": {
+   "head": [
+    "Water",
+    "6% bleach",
+    "8.25% bleach"
+   ],
+   "rows": [
+    [
+     "1 quart or 1 litre",
+     "2 drops",
+     "2 drops"
+    ],
+    [
+     "1 gallon",
+     "8 drops",
+     "6 drops"
+    ],
+    [
+     "2 gallons",
+     "16 drops (1/4 tsp)",
+     "12 drops (1/8 tsp)"
+    ]
+   ]
+  },
+  "tags": "purify chlorine drinking treat"
+ },
+ {
+  "id": "water-supply",
+  "cat": "Water",
+  "title": "Finding and storing water",
+  "summary": "Plan on at least 1 gallon (about 4 litres) per person per day, for drinking and hygiene.",
+  "steps": [
+   "Keep at least a 3-day supply for everyone in the house; 2 weeks is better. Pets need water too.",
+   "Store water in food-grade containers in a cool, dark place. Replace home-filled water every 6 months.",
+   "Hidden water at home: the water heater tank (turn off its power or gas first, then open the drain valve at the bottom), ice cubes, and water in the pipes (open the highest faucet, then drain from the lowest).",
+   "The toilet tank (not the bowl) holds clean water if no chemical cleaners are in it. Disinfect it before drinking.",
+   "Outdoor water from streams, rain or lakes must be boiled or disinfected."
+  ],
+  "source": "Ready.gov, Water; U.S. CDC.",
+  "warn": "Never drink water from waterbeds, radiators, hot-water heating boilers, or pools and spas.",
+  "tags": "storage gallon supply"
+ },
+ {
+  "id": "food-outage",
+  "cat": "Food",
+  "title": "Food safety when the power is out",
+  "summary": "Keep the fridge and freezer closed. Every opening lets cold out.",
+  "steps": [
+   "An unopened fridge keeps food cold for about 4 hours.",
+   "A full freezer holds its temperature for about 48 hours (24 hours if half full).",
+   "Throw out perishable food (meat, poultry, fish, eggs, milk, leftovers) that has been above 40°F (4°C) for 2 hours or more.",
+   "Frozen food that still has ice crystals or is at 40°F or below can be refrozen.",
+   "Never taste food to decide if it's safe."
+  ],
+  "source": "FoodSafety.gov (U.S. Department of Agriculture), Food Safety in a Power Outage.",
+  "warn": "When in doubt, throw it out.",
+  "tags": "fridge freezer outage spoil"
+ },
+ {
+  "id": "food-supply",
+  "cat": "Food",
+  "title": "Emergency food",
+  "summary": "Choose food that keeps, needs no cooking and little water, and that your household will actually eat.",
+  "steps": [
+   "Plan on about 2,000 calories per adult per day. The Supplies page can count how many days you have.",
+   "Good choices: canned meat, fish, beans, fruit and vegetables; peanut butter; nuts; crackers; dry cereal; protein bars; dried fruit.",
+   "Keep a manual can opener with the food.",
+   "Remember infant formula, special diets, medicines and pet food.",
+   "Rotate: use the oldest food first and replace it.",
+   "Throw away cans that are bulging, leaking, rusted or badly dented."
+  ],
+  "source": "Ready.gov, Food.",
+  "tags": "calories canned storage"
+ },
+ {
+  "id": "priorities",
+  "cat": "Fire & shelter",
+  "title": "Survival priorities",
+  "summary": "A rule of thumb for what to deal with first. Times are rough averages, not limits.",
+  "steps": [
+   "Make yourself and others safe, and treat serious injuries.",
+   "Shelter: in harsh weather you can lose dangerous heat in about 3 hours.",
+   "Water: most people can't go more than about 3 days without it.",
+   "Fire: for warmth, boiling water, light and signaling.",
+   "Signals: make it easy to be found.",
+   "Food: you can last about 3 weeks without it, so it comes last."
+  ],
+  "source": "U.S. Army FM 21-76 Survival; common survival training (\"rule of threes\").",
+  "tags": "rule of three plan"
+ },
+ {
+  "id": "fire",
+  "cat": "Fire & shelter",
+  "title": "Starting a fire",
+  "summary": "Fire needs heat, fuel and air. Gather everything before you light it.",
+  "steps": [
+   "Collect tinder (dry grass, birch bark, dryer lint, cotton balls with petroleum jelly), kindling (dry twigs from pencil to thumb thickness) and fuel (wrist-thick and larger).",
+   "Pick a spot sheltered from wind, away from overhanging branches, and clear about 10 feet around it.",
+   "Ring it with rocks if you can. Avoid wet or porous river rocks, which can crack or burst.",
+   "Make a loose pile of tinder, then lean kindling over it like a teepee, leaving gaps for air.",
+   "Light the tinder from the side the wind is coming from, and blow gently at the base.",
+   "Add bigger fuel gradually once the kindling is burning well.",
+   "To put it out: drown it with water, stir the ashes, and drown again until everything is cold to touch."
+  ],
+  "source": "U.S. Army FM 21-76 Survival; U.S. National Park Service campfire safety.",
+  "warn": "Never leave a fire unattended, and never bring a fire, grill or camp stove indoors: carbon monoxide kills.",
+  "tags": "campfire tinder kindling warm"
+ },
+ {
+  "id": "shelter",
+  "cat": "Fire & shelter",
+  "title": "Emergency shelter and warmth",
+  "summary": "Get out of the wind and wet, and insulate yourself from the ground: the ground steals more heat than the air.",
+  "steps": [
+   "Get out of wind, rain and snow first.",
+   "Put insulation under you: pine boughs, dry leaves, cardboard, foam pads or extra clothing.",
+   "Keep the space small. A small space is easier to keep warm.",
+   "Stay dry. Wet clothing loses most of its warmth.",
+   "Wear layers and cover your head and neck.",
+   "Stuck in a car in snow: stay with the vehicle. Run the engine about 10 minutes each hour for heat, keep the exhaust pipe clear of snow, and open a window slightly."
+  ],
+  "source": "U.S. Army FM 21-76 Survival; Ready.gov, Winter Weather.",
+  "tags": "cold warm insulation car snow"
+ },
+ {
+  "id": "carbon-monoxide",
+  "cat": "Power & safety",
+  "title": "Carbon monoxide",
+  "summary": "Carbon monoxide (CO) has no smell or color and kills hundreds of people in the U.S. every year, often during power outages.",
+  "steps": [
+   "Never use a generator, grill, camp stove or charcoal inside a home, garage, basement or crawlspace, even with doors and windows open.",
+   "Keep generators outside, at least 20 feet from windows, doors and vents.",
+   "Have battery-powered CO alarms and test them.",
+   "Symptoms: headache, dizziness, weakness, upset stomach, vomiting, chest pain, confusion. Sleeping people can die without waking.",
+   "If you suspect CO: get everyone into fresh air immediately, then call 911."
+  ],
+  "source": "U.S. Centers for Disease Control and Prevention (CDC), Carbon Monoxide Poisoning.",
+  "tags": "co generator gas poisoning fumes"
+ },
+ {
+  "id": "generator",
+  "cat": "Power & safety",
+  "title": "Using a generator safely",
+  "summary": "Generators save food and medicine during outages, but they cause carbon monoxide deaths, fires and electrocution.",
+  "steps": [
+   "Run it outdoors only, at least 20 feet from the house, on a dry surface, sheltered from rain.",
+   "Turn it off and let it cool before refueling.",
+   "Plug appliances directly into the generator with heavy-duty outdoor extension cords.",
+   "Never plug a generator into a wall outlet (\"backfeeding\"). It can electrocute utility workers and neighbors.",
+   "To power house circuits, have an electrician install a transfer switch.",
+   "Store fuel in approved containers, away from the house and any flame."
+  ],
+  "source": "Ready.gov, Power Outages; U.S. CDC; OSHA.",
+  "tags": "power outage electricity fuel"
+ },
+ {
+  "id": "signals",
+  "cat": "Signals & navigation",
+  "title": "Signaling for help",
+  "summary": "Make yourself big, bright and different from the surroundings.",
+  "steps": [
+   "Three of anything means distress: 3 fires in a triangle, 3 whistle blasts, 3 flashes.",
+   "SOS in Morse code is ··· ––– ··· (3 short, 3 long, 3 short). The SOS Light tool can flash it.",
+   "A signal mirror (or any shiny surface) can be seen for miles. Aim the flash at aircraft or ships; sweep the horizon even if you see no one.",
+   "Smoke by day (green leaves on a fire make white smoke), fire by night.",
+   "Make ground signals at least 10 feet (3 m) tall in a contrasting color, using rocks, branches or clothing."
+  ],
+  "source": "U.S. Army FM 21-76 Survival; international ground-to-air signals.",
+  "table": {
+   "head": [
+    "Ground symbol",
+    "Meaning"
+   ],
+   "rows": [
+    [
+     "V",
+     "Need assistance"
+    ],
+    [
+     "X",
+     "Need medical help"
+    ],
+    [
+     "↑ (arrow)",
+     "Going this way"
+    ],
+    [
+     "Y",
+     "Yes"
+    ],
+    [
+     "N",
+     "No"
+    ]
+   ]
+  },
+  "tags": "sos rescue whistle mirror morse help"
+ },
+ {
+  "id": "direction",
+  "cat": "Signals & navigation",
+  "title": "Finding direction without a compass",
+  "summary": "Two reliable methods, plus a quick check from the sun.",
+  "steps": [
+   "Shadow stick: push a straight stick upright in the ground and mark the tip of its shadow.",
+   "Wait 15 minutes and mark the new shadow tip.",
+   "A line from the first mark to the second runs roughly west to east. Stand with the first mark on your left: you're facing north.",
+   "At night (Northern Hemisphere): find the Big Dipper. The two stars at the end of its cup point to the North Star, about 5 times the distance between them. Facing it, you face north.",
+   "The sun rises roughly in the east and sets roughly in the west.",
+   "Moss on trees and other folk methods are not reliable."
+  ],
+  "source": "U.S. Army FM 21-76 Survival.",
+  "tags": "north compass navigation lost stars"
+ },
+ {
+  "id": "radio-freqs",
+  "cat": "Signals & navigation",
+  "title": "Emergency radio frequencies",
+  "summary": "Where to listen for news and help. The Weather Radio tool can tune these with an RTL-SDR dongle.",
+  "steps": [
+   "NOAA Weather Radio broadcasts forecasts and emergency alerts 24 hours a day on 7 channels. One will be strongest where you are.",
+   "Listening is always legal. Transmitting on GMRS and ham bands needs an FCC license, except to protect life in a real emergency. FRS and CB need no license."
+  ],
+  "source": "NOAA; U.S. Federal Communications Commission (FCC); ARRL.",
+  "table": {
+   "head": [
+    "Service",
+    "Frequency",
+    "Notes"
+   ],
+   "rows": [
+    [
+     "NOAA Weather Radio",
+     "162.400, 162.425, 162.450, 162.475, 162.500, 162.525, 162.550 MHz",
+     "Weather and emergency alerts"
+    ],
+    [
+     "GMRS / FRS channel 20",
+     "462.675 MHz",
+     "Often used for emergencies and travelers"
+    ],
+    [
+     "FRS / GMRS channel 1",
+     "462.5625 MHz",
+     "Common default channel"
+    ],
+    [
+     "CB channel 9",
+     "27.065 MHz (AM)",
+     "Emergency channel"
+    ],
+    [
+     "CB channel 19",
+     "27.185 MHz (AM)",
+     "Truckers, road conditions"
+    ],
+    [
+     "Marine VHF channel 16",
+     "156.800 MHz",
+     "Distress and calling"
+    ],
+    [
+     "Ham 2 m calling",
+     "146.520 MHz",
+     "National simplex calling frequency"
+    ],
+    [
+     "Ham 70 cm calling",
+     "446.000 MHz",
+     "National simplex calling frequency"
+    ]
+   ]
+  },
+  "tags": "noaa weather cb gmrs frs ham marine scanner"
+ },
+ {
+  "id": "sanitation",
+  "cat": "Power & safety",
+  "title": "Sanitation without running water",
+  "summary": "Keeping waste and germs under control prevents illness, which is a major danger after disasters.",
+  "steps": [
+   "Bucket toilet: line a 5-gallon bucket with a heavy trash bag. After each use, cover waste with sawdust, cat litter or dry soil.",
+   "Tie bags closed and store them away from people and water until they can be disposed of.",
+   "Outdoors: dig a hole 6 to 8 inches deep, at least 200 feet from water, camp and trails, and cover it after use.",
+   "Wash hands with soap and clean water for 20 seconds, or use hand sanitizer with at least 60% alcohol.",
+   "Keep drinking water and food away from waste and dirty hands."
+  ],
+  "source": "U.S. CDC, Handwashing; Leave No Trace Center for Outdoor Ethics.",
+  "tags": "toilet hygiene waste hands"
+ }
+]

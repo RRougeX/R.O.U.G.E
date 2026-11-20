@@ -1,0 +1,8 @@
+{
+  "name": "Unit Converter",
+  "desc": "Convert temperature, distance, weight, volume, speed and pressure. An example custom module.",
+  "icon": "ruler",
+  "version": "1.0.0",
+  "entry": "index.html",
+  "guest": true
+}

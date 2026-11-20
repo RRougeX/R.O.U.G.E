@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>R.O.U.G.E</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2318181b'/%3E%3Cpath d='M7 15l5-8 5 8z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/assets/maplibre-gl.css">
+  <script>
+    // apply the saved theme before first paint
+    try {
+      const t = localStorage.getItem("rouge-theme");
+      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark");
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/home">
+        <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M6 16l6-9 6 9z"/></svg></span>
+        <span class="brand-text">R.O.U.G.E</span>
+      </a>
+      <button class="search-trigger" id="open-command" type="button">
+        <span data-icon="search"></span><span class="grow">Search…</span><kbd>Ctrl K</kbd>
+      </button>
+      <nav class="nav" id="nav"></nav>
+      <div class="sidebar-footer">
+        <div class="status-line" id="side-status"><span class="dot"></span><span>Starting…</span></div>
+        <button class="btn btn-ghost btn-icon" id="open-settings" type="button" title="Settings"><span data-icon="settings"></span></button>
+        <button class="btn btn-ghost btn-icon" id="theme-toggle" type="button" title="Light / dark"><span data-icon="sun"></span></button>
+      </div>
+    </aside>
+    <main class="main" id="view"></main>
+  </div>
+
+  <div class="dialog-backdrop" id="command" hidden>
+    <div class="dialog command" role="dialog" aria-label="Search">
+      <div class="command-input"><span data-icon="search"></span><input id="command-q" placeholder="Search the guide, articles, places and notes…" autocomplete="off"><kbd>Esc</kbd></div>
+      <div class="command-list" id="command-list"></div>
+    </div>
+  </div>
+  <div class="dialog-backdrop" id="modal" hidden><div class="dialog" id="modal-body"></div></div>
+  <div class="toasts" id="toasts"></div>
+
+  <script src="/assets/maplibre-gl.js"></script>
+  <script src="/assets/pmtiles.js"></script>
+  <script src="/mapstyle.js"></script>
+  <script src="/app.js"></script>
+  <script src="/shell.js"></script>
+</body>
+</html>

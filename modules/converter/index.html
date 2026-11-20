@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit Converter</title>
+<!-- Custom modules can reuse R.O.U.G.E's stylesheet so they look built in. -->
+<link rel="stylesheet" href="/app.css">
+<style>
+  body { overflow: auto; }
+  .conv { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+  .conv .eq { padding-bottom: 8px; color: hsl(var(--muted-foreground)); }
+  @media (max-width: 600px) { .conv { grid-template-columns: 1fr; } .conv .eq { display: none; } }
+</style>
+<script>
+  // follow R.O.U.G.E's light/dark theme
+  const syncTheme = () => { try { document.documentElement.classList.toggle("dark", parent.document.documentElement.classList.contains("dark")); } catch (e) {} };
+  syncTheme();
+  try { parent.addEventListener("themechange", syncTheme); } catch (e) {}
+</script>
+</head>
+<body>
+<div class="page">
+  <div class="chips" id="kinds" style="margin-bottom:14px"></div>
+  <div class="card card-pad">
+    <div class="conv">
+      <label class="field">From<input class="input" id="a" type="number" step="any" value="1"><select class="select" id="ua"></select></label>
+      <div class="eq">=</div>
+      <label class="field">To<input class="input" id="b" type="number" step="any"><select class="select" id="ub"></select></label>
+    </div>
+  </div>
+  <p class="muted small" style="margin-top:12px" id="note"></p>
+</div>
+<script>
+// each unit: factor to the base unit (or functions for temperature)
+const KINDS = {
+  Temperature: { base: "C", units: { "°C": [(v) => v, (v) => v], "°F": [(v) => (v - 32) * 5 / 9, (v) => v * 9 / 5 + 32], "K": [(v) => v - 273.15, (v) => v + 273.15] } },
+  Distance: { units: { "metres": 1, "kilometres": 1000, "feet": 0.3048, "yards": 0.9144, "miles": 1609.344, "nautical miles": 1852, "inches": 0.0254, "centimetres": 0.01 } },
+  Weight: { units: { "kilograms": 1, "grams": 0.001, "pounds": 0.45359237, "ounces": 0.028349523125, "stone": 6.35029318 } },
+  Volume: { units: { "litres": 1, "millilitres": 0.001, "US gallons": 3.785411784, "US quarts": 0.946352946, "US cups": 0.2365882365, "US fl oz": 0.0295735296, "tablespoons": 0.0147867648, "teaspoons": 0.00492892159 } },
+  Speed: { units: { "km/h": 1, "mph": 1.609344, "m/s": 3.6, "knots": 1.852 } },
+  Pressure: { units: { "hPa (millibar)": 1, "inHg": 33.8638866667, "mmHg": 1.33322387415, "psi": 68.9475729318, "kPa": 10 } }
+};
+const NOTES = { Volume: "Water: about 8 drops of 6% bleach per US gallon (see the Field Guide).", Pressure: "Normal sea-level air pressure is about 1013 hPa (29.92 inHg)." };
+let kind = "Temperature";
+const $ = (id) => document.getElementById(id);
+function fill() {
+  const names = Object.keys(KINDS[kind].units);
+  $("ua").innerHTML = $("ub").innerHTML = names.map((n) => `<option>${n}</option>`).join("");
+  $("ub").selectedIndex = 1;
+  $("note").textContent = NOTES[kind] || "";
+  document.querySelectorAll("#kinds .chip").forEach((c) => c.classList.toggle("active", c.textContent === kind));
+  calc("a");
+}
+function conv(v, from, to) {
+  const u = KINDS[kind].units;
+  if (typeof u[from] === "number") return v * u[from] / u[to];
+  return u[to][1](u[from][0](v));
+}
+function calc(src) {
+  const [i, o, ui, uo] = src === "a" ? ["a", "b", "ua", "ub"] : ["b", "a", "ub", "ua"];
+  const v = parseFloat($(i).value);
+  $(o).value = isNaN(v) ? "" : +conv(v, $(ui).value, $(uo).value).toPrecision(6);
+}
+$("kinds").innerHTML = Object.keys(KINDS).map((k) => `<button class="chip">${k}</button>`).join("");
+document.querySelectorAll("#kinds .chip").forEach((c) => c.onclick = () => { kind = c.textContent; fill(); });
+$("a").oninput = () => calc("a"); $("b").oninput = () => calc("b");
+$("ua").onchange = () => calc("a"); $("ub").onchange = () => calc("a");
+fill();
+</script>
+</body>
+</html>

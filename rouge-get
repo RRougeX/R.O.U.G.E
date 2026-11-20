@@ -1,0 +1,347 @@
+#!/usr/bin/env bash
+# rouge-get: download Wikipedia and other books, offline maps and place names.
+# Run it while the Pi has internet. Everything it gets keeps working with none.
+#
+#   rouge-get                       menu
+#   rouge-get book wikipedia wikipedia_en_all_nopic
+#   rouge-get map  NY               a US state by its two-letter code
+#   rouge-get map  "Home" -77.9,42.9,-77.3,43.4 [maxzoom]
+#   rouge-get world                 the whole world at overview detail
+#   rouge-get places                place names for map search
+set -euo pipefail
+
+DATA="${ROUGE_DATA:-}"
+[ -z "$DATA" ] && [ -r /etc/default/rouge ] && DATA="$(sed -n 's/^ROUGE_DATA=//p' /etc/default/rouge)"
+DATA="${DATA:-$HOME/rouge}"
+ADDR="$( [ -r /etc/default/rouge ] && sed -n 's/^ROUGE_ADDR=//p' /etc/default/rouge || true)"
+API="http://127.0.0.1:${ADDR##*:}"; [ "$API" = "http://127.0.0.1:" ] && API="http://127.0.0.1:8080"
+KIWIX="https://download.kiwix.org/zim"
+mkdir -p "$DATA"/{zim,maps,places,bin}
+
+b()    { printf '\033[1m%s\033[0m' "$*"; }
+say()  { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
+warn() { printf '\033[33m  ! %s\033[0m\n' "$*"; }
+ok()   { printf '\033[32m  ✓ %s\033[0m\n' "$*"; }
+yes()  { local a; read -r -p "  $1 [Y/n] " a || true; [[ ! "$a" =~ ^[Nn] ]]; }
+human() { awk -v n="${1:-0}" 'BEGIN{split("B KB MB GB TB",u);i=1;while(n>=1000&&i<5){n/=1000;i++}f=(i>3?"%.1f %s":"%.0f %s");printf f,n,u[i]}'; }
+free_bytes() { df -B1 --output=avail "$DATA" | tail -1 | tr -d ' '; }
+remote_size() { curl -fsSIL "$1" 2>/dev/null | tr -d '\r' | awk 'tolower($1)=="content-length:"{n=$2} END{print n+0}'; }
+
+rescan() {
+  if curl -fsS -m 30 -X POST "$API/api/rescan" >/dev/null 2>&1; then ok "R.O.U.G.E has picked up the new files"
+  else warn "R.O.U.G.E isn't running; the files will be found next time it starts"; fi
+}
+
+need_internet() {
+  curl -fsS -m 10 -o /dev/null https://download.kiwix.org/ 2>/dev/null \
+    || curl -fsS -m 10 -o /dev/null https://github.com 2>/dev/null \
+    || { warn "No internet connection. Connect to Wi-Fi or Ethernet and try again."; exit 1; }
+}
+
+# Downloads to NAME.part and renames when finished, so a half-finished file is never used.
+# Re-running resumes where it stopped.
+download() { # url dest
+  local url="$1" dest="$2"
+  wget -c -q --show-progress --tries=20 --retry-connrefused --waitretry=5 -O "$dest.part" "$url"
+  mv -f "$dest.part" "$dest"
+}
+
+check_space() { # bytes
+  local need="$1" have; have="$(free_bytes)"
+  if [ "$need" -gt 0 ] && [ "$need" -gt $((have - 500000000)) ]; then
+    warn "Needs $(human "$need") but only $(human "$have") is free."
+    return 1
+  fi
+}
+
+# ------------------------------------------------------------------ books
+latest_zim() { # folder prefix -> newest file name
+  curl -fsSL "$KIWIX/$1/" | grep -oE "$2_[0-9]{4}-[0-9]{2}\.zim" | sort -u | sort -V | tail -1
+}
+
+get_book() { # folder prefix
+  local dir="$1" prefix="$2" file url size old
+  printf '  Looking up %s... ' "$prefix"
+  file="$(latest_zim "$dir" "$prefix" || true)"
+  if [ -z "$file" ]; then echo; warn "Not found on the Kiwix server (it may have been renamed)."; return 0; fi
+  echo "$file"
+  if [ -f "$DATA/zim/$file" ]; then ok "already have it"; return 0; fi
+  url="$KIWIX/$dir/$file"; size="$(remote_size "$url")"
+  echo "  Size: $(human "$size")   Free: $(human "$(free_bytes)")"
+  check_space "$size" || return 0
+  yes "Download it?" || return 0
+  download "$url" "$DATA/zim/$file"
+  ok "saved $file"
+  for old in "$DATA"/zim/"$prefix"_*.zim; do
+    [ "$old" = "$DATA/zim/$file" ] || [ ! -f "$old" ] && continue
+    yes "Delete the older copy $(basename "$old")?" && rm -f "$old"
+  done
+  return 0
+}
+
+menu_wikipedia() {
+  say "Wikipedia (English)"
+  cat <<EOF
+  1) Full, with pictures     about 110 GB   best, needs a 256 GB card or SSD
+  2) Full, no pictures       about 55 GB    every article, text only (recommended)
+  3) Top articles, intro     about 12 GB    short version of every article
+  4) Top 50,000 articles     about 7 GB     with pictures
+  5) Tiny test (100 articles) a few MB      to check everything works
+EOF
+  read -r -p "  Choose 1-5 (Enter to skip): " c || true
+  case "$c" in
+    1) get_book wikipedia wikipedia_en_all_maxi ;;
+    2) get_book wikipedia wikipedia_en_all_nopic ;;
+    3) get_book wikipedia wikipedia_en_all_mini ;;
+    4) get_book wikipedia wikipedia_en_top_maxi ;;
+    5) get_book wikipedia wikipedia_en_100 ;;
+  esac
+}
+
+BOOKS=(
+  "other|mdwiki_en_all_maxi|WikiMed: medical encyclopedia (about 2 GB)"
+  "wikivoyage|wikivoyage_en_all_maxi|Wikivoyage: travel guide, regions and towns (about 1 GB)"
+  "wiktionary|wiktionary_en_all_nopic|Wiktionary: dictionary (about 8 GB)"
+  "other|appropedia_en_all_maxi|Appropedia: off-grid, water, energy, building (about 1 GB)"
+  "ifixit|ifixit_en_all|iFixit: repair guides (about 3 GB)"
+  "other|zimgit-post-disaster_en|Post-disaster library: survival manuals (about 0.6 GB)"
+  "other|zimgit-water_en|Water: purification and supply manuals (small)"
+  "other|zimgit-medicine_en|Medicine: field medical manuals (small)"
+  "other|zimgit-food-preparation_en|Food: preparation and preservation manuals (small)"
+  "wikibooks|wikibooks_en_all_nopic|Wikibooks: textbooks (about 3 GB)"
+  "gutenberg|gutenberg_en_all|Project Gutenberg: 60,000+ classic books (about 70 GB)"
+)
+
+menu_books() {
+  say "Other books"
+  local i=1 e
+  for e in "${BOOKS[@]}"; do printf '  %2d) %s\n' "$i" "${e##*|}"; i=$((i + 1)); done
+  read -r -p "  Numbers separated by spaces, e.g. 1 2 4 (Enter to skip): " picks || true
+  for n in $picks; do
+    [[ "$n" =~ ^[0-9]+$ ]] && [ "$n" -ge 1 ] && [ "$n" -le ${#BOOKS[@]} ] || continue
+    e="${BOOKS[$((n - 1))]}"; IFS='|' read -r d p _ <<<"$e"
+    get_book "$d" "$p"
+  done
+}
+
+# ------------------------------------------------------------------ maps
+STATES="AL Alabama -88.5,30.1,-84.9,35.0
+AK Alaska -179.2,51.2,-129.9,71.4
+AZ Arizona -114.9,31.3,-109.0,37.0
+AR Arkansas -94.7,33.0,-89.6,36.5
+CA California -124.5,32.5,-114.1,42.0
+CO Colorado -109.1,36.9,-102.0,41.0
+CT Connecticut -73.8,40.9,-71.8,42.1
+DE Delaware -75.8,38.4,-75.0,39.9
+DC Washington_DC -77.12,38.79,-76.91,39.0
+FL Florida -87.7,24.4,-80.0,31.0
+GA Georgia -85.6,30.3,-80.8,35.0
+HI Hawaii -160.3,18.9,-154.8,22.3
+ID Idaho -117.3,41.9,-111.0,49.0
+IL Illinois -91.6,36.9,-87.0,42.5
+IN Indiana -88.1,37.7,-84.8,41.8
+IA Iowa -96.7,40.3,-90.1,43.5
+KS Kansas -102.1,36.9,-94.6,40.0
+KY Kentucky -89.6,36.5,-81.9,39.2
+LA Louisiana -94.1,28.9,-88.8,33.1
+ME Maine -71.1,43.0,-66.9,47.5
+MD Maryland -79.5,37.9,-75.0,39.8
+MA Massachusetts -73.5,41.2,-69.9,42.9
+MI Michigan -90.4,41.7,-82.4,48.3
+MN Minnesota -97.3,43.5,-89.5,49.4
+MS Mississippi -91.7,30.1,-88.1,35.0
+MO Missouri -95.8,35.9,-89.1,40.6
+MT Montana -116.1,44.3,-104.0,49.0
+NE Nebraska -104.1,40.0,-95.3,43.0
+NV Nevada -120.0,35.0,-114.0,42.0
+NH New_Hampshire -72.6,42.7,-70.6,45.3
+NJ New_Jersey -75.6,38.9,-73.9,41.4
+NM New_Mexico -109.1,31.3,-103.0,37.0
+NY New_York -79.8,40.5,-71.8,45.0
+NC North_Carolina -84.3,33.8,-75.4,36.6
+ND North_Dakota -104.1,45.9,-96.5,49.0
+OH Ohio -84.8,38.4,-80.5,42.0
+OK Oklahoma -103.0,33.6,-94.4,37.0
+OR Oregon -124.6,41.9,-116.4,46.3
+PA Pennsylvania -80.5,39.7,-74.7,42.3
+RI Rhode_Island -71.9,41.1,-71.1,42.0
+SC South_Carolina -83.4,32.0,-78.5,35.2
+SD South_Dakota -104.1,42.5,-96.4,45.9
+TN Tennessee -90.3,35.0,-81.6,36.7
+TX Texas -106.7,25.8,-93.5,36.5
+UT Utah -114.1,37.0,-109.0,42.0
+VT Vermont -73.4,42.7,-71.5,45.0
+VA Virginia -83.7,36.5,-75.2,39.5
+WA Washington -124.8,45.5,-116.9,49.0
+WV West_Virginia -82.6,37.2,-77.7,40.6
+WI Wisconsin -92.9,42.5,-86.8,47.1
+WY Wyoming -111.1,41.0,-104.1,45.0"
+
+PMTILES="$DATA/bin/pmtiles"
+
+ensure_pmtiles() {
+  if command -v pmtiles >/dev/null; then PMTILES="$(command -v pmtiles)"; return 0; fi
+  [ -x "$PMTILES" ] && return 0
+  say "Getting the pmtiles map tool (one time)"
+  local pat urls url tmp
+  case "$(uname -m)" in
+    aarch64|arm64) pat='arm64|aarch64' ;;
+    armv6l|armv7l) pat='armv6|armv7|_arm[._]' ;;
+    *) pat='x86_64|amd64' ;;
+  esac
+  urls="$(curl -fsSL https://api.github.com/repos/protomaps/go-pmtiles/releases/latest \
+          | grep -oE '"browser_download_url": *"[^"]+"' | cut -d'"' -f4)"
+  url="$(printf '%s\n' "$urls" | grep -i linux | grep -iE "$pat" | grep -E '\.(tar\.gz|tgz|zip)$' | head -1 || true)"
+  [ -n "$url" ] || { warn "No pmtiles download for this CPU. Get it from github.com/protomaps/go-pmtiles/releases and put it in $DATA/bin/"; return 1; }
+  tmp="$(mktemp -d)"
+  curl -fsSL "$url" -o "$tmp/p"
+  case "$url" in *.zip) unzip -q "$tmp/p" -d "$tmp" ;; *) tar -xzf "$tmp/p" -C "$tmp" ;; esac
+  install -m 755 "$(find "$tmp" -type f -name pmtiles | head -1)" "$PMTILES"
+  rm -rf "$tmp"
+  ok "pmtiles $("$PMTILES" version 2>/dev/null | head -1)"
+}
+
+latest_build() {
+  local d i
+  for i in $(seq 0 20); do
+    d="$(date -u -d "-$i day" +%Y%m%d)"
+    if curl -fsSI -m 15 -o /dev/null "https://build.protomaps.com/$d.pmtiles"; then
+      echo "https://build.protomaps.com/$d.pmtiles"; return 0
+    fi
+  done
+  return 1
+}
+
+get_map() { # name bbox maxzoom
+  local name="$1" bbox="$2" maxz="${3:-15}" src out file
+  file="$(printf '%s' "$name" | tr -c 'A-Za-z0-9._-' '-' | sed 's/-\+/-/g;s/^-//;s/-$//').pmtiles"
+  out="$DATA/maps/$file"
+  ensure_pmtiles || return 0
+  printf '  Finding the newest world map build... '
+  src="$(latest_build)" || { echo; warn "Could not reach build.protomaps.com"; return 0; }
+  echo "${src##*/}"
+  echo "  Area: $bbox   Detail: zoom 0-$maxz"
+  "$PMTILES" extract "$src" "$out" --bbox="$bbox" --maxzoom="$maxz" --dry-run 2>&1 | grep -iE 'size|tiles|bytes' | tail -3 | sed 's/^/  /' || true
+  [ -f "$out" ] && warn "$file already exists and will be replaced."
+  yes "Download this map?" || return 0
+  "$PMTILES" extract "$src" "$out.part" --bbox="$bbox" --maxzoom="$maxz" --download-threads=4
+  mv -f "$out.part" "$out"
+  ok "saved maps/$file ($(human "$(stat -c %s "$out")"))"
+}
+
+pad_bbox() { awk -F, -v p="${2:-0.2}" '{printf "%.4f,%.4f,%.4f,%.4f", $1-p, $2-p, $3+p, $4+p}' <<<"$1"; }
+
+radius_bbox() { # lat lon miles
+  awk -v la="$1" -v lo="$2" -v mi="$3" 'BEGIN{pi=atan2(0,-1); d=mi/69.0; e=d/cos(la*pi/180);
+    printf "%.4f,%.4f,%.4f,%.4f", lo-e, la-d, lo+e, la+d}'
+}
+
+detail_choice() {
+  echo "  Detail: 1) streets and buildings, zoom 15 (biggest)  2) streets, zoom 14 (about half)  3) roads and towns, zoom 12 (small)" >&2
+  local z; read -r -p "  Choose 1-3 [1]: " z || true
+  case "$z" in 2) echo 14 ;; 3) echo 12 ;; *) echo 15 ;; esac
+}
+
+map_for_state() {
+  local code="${1^^}" zoom="${2:-15}" line
+  line="$(printf '%s\n' "$STATES" | awk -v c="$code" '$1==c')"
+  [ -n "$line" ] || { warn "Unknown state code $1"; return 1; }
+  set -- $line
+  get_map "${2//_/-}" "$(pad_bbox "$3")" "$zoom"
+}
+
+menu_maps() {
+  say "Offline maps (from OpenStreetMap)"
+  cat <<EOF
+  1) A US state
+  2) Around a point (latitude, longitude and a radius)
+  3) A box you type (min lon, min lat, max lon, max lat)
+  4) Whole world overview, zoom 0-6 (countries, cities, main roads; about 1 GB)
+EOF
+  echo "  Tip: get a detailed map of your area plus the world overview. Each one shows up in the Maps menu."
+  read -r -p "  Choose 1-4 (Enter to skip): " c || true
+  case "$c" in
+    1) printf '%s\n' "$STATES" | awk '{printf "  %s %-15s", $1, $2; if (NR%4==0) print ""} END{print ""}' | tr '_' ' '
+       read -r -p "  Two-letter state code: " s || true
+       [ -n "$s" ] && { z="$(detail_choice)"; map_for_state "$s" "$z"; } ;;
+    2) read -r -p "  Name for this map (e.g. Home): " n || true
+       read -r -p "  Latitude, longitude (e.g. 43.16, -77.61): " ll || true
+       read -r -p "  Radius in miles [50]: " r || true
+       la="$(echo "$ll" | cut -d, -f1 | tr -d ' ')"; lo="$(echo "$ll" | cut -d, -f2 | tr -d ' ')"
+       [[ "$la" =~ ^-?[0-9.]+$ && "$lo" =~ ^-?[0-9.]+$ ]] || { warn "Couldn't read those coordinates"; return 0; }
+       z="$(detail_choice)"; get_map "${n:-Area}" "$(radius_bbox "$la" "$lo" "${r:-50}")" "$z" ;;
+    3) read -r -p "  Name for this map: " n || true
+       read -r -p "  Box as min_lon,min_lat,max_lon,max_lat: " bb || true
+       [[ "$(tr -d ' ' <<<"$bb")" =~ ^-?[0-9.]+,-?[0-9.]+,-?[0-9.]+,-?[0-9.]+$ ]] || { warn "Couldn't read that box"; return 0; }
+       z="$(detail_choice)"; get_map "${n:-Area}" "$(tr -d ' ' <<<"$bb")" "$z" ;;
+    4) get_map "World" "-180,-85,180,85" 6 ;;
+  esac
+}
+
+# ------------------------------------------------------------------ places
+get_places() {
+  say "Place names for map search (GeoNames, about 12 MB)"
+  local t; t="$(mktemp -d)"
+  curl -fL --progress-bar https://download.geonames.org/export/dump/cities500.zip -o "$t/c.zip"
+  unzip -o -q "$t/c.zip" -d "$t"
+  mv -f "$t/cities500.txt" "$DATA/places/cities500.txt"
+  curl -fsSL https://download.geonames.org/export/dump/admin1CodesASCII.txt -o "$DATA/places/admin1CodesASCII.txt"
+  curl -fsSL https://download.geonames.org/export/dump/countryInfo.txt -o "$DATA/places/countryInfo.txt"
+  rm -rf "$t"
+  ok "place names saved"
+}
+
+# ------------------------------------------------------------------ status
+show_status() {
+  say "What's on this device ($DATA)"
+  local f any=0
+  for f in "$DATA"/zim/*.zim "$DATA"/maps/*.pmtiles; do
+    [ -f "$f" ] || continue; any=1
+    printf '  %-50s %10s\n' "${f#"$DATA"/}" "$(human "$(stat -c %s "$f")")"
+  done
+  [ -f "$DATA/places/cities500.txt" ] && { any=1; echo "  places/cities500.txt (place names)"; }
+  [ $any = 1 ] || echo "  Nothing downloaded yet."
+  ls "$DATA"/zim/*.part "$DATA"/maps/*.part >/dev/null 2>&1 && warn "Unfinished downloads (.part) are there; run the same download again to resume."
+  echo "  Free space: $(human "$(free_bytes)")"
+}
+
+# ------------------------------------------------------------------ main
+case "${1:-}" in
+  book)   need_internet; get_book "$2" "$3"; rescan; exit ;;
+  map)    need_internet
+          if [ $# -ge 3 ]; then get_map "$2" "$3" "${4:-15}"; else map_for_state "$2" "${3:-15}"; fi
+          rescan; exit ;;
+  world)  need_internet; get_map "World" "-180,-85,180,85" 6; rescan; exit ;;
+  places) need_internet; get_places; rescan; exit ;;
+  status) show_status; exit ;;
+  -h|--help|help) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit ;;
+  "") ;;
+  *) warn "Unknown command $1 (try rouge-get help)"; exit 1 ;;
+esac
+
+need_internet
+while true; do
+  show_status
+  say "What do you want to download?"
+  cat <<EOF
+  1) Wikipedia
+  2) Other books (medicine, survival manuals, repair, dictionary...)
+  3) Maps
+  4) Place names for map search
+  5) Recommended starter set (Wikipedia no pictures, WikiMed, survival manuals, place names)
+  q) Quit
+EOF
+  read -r -p "  Choose: " c || exit 0
+  case "$c" in
+    1) menu_wikipedia ;;
+    2) menu_books ;;
+    3) menu_maps; [ -f "$DATA/places/cities500.txt" ] || { yes "Also get place names so you can search the map?" && get_places; } ;;
+    4) get_places ;;
+    5) get_book wikipedia wikipedia_en_all_nopic; get_book other mdwiki_en_all_maxi
+       get_book other zimgit-post-disaster_en; get_book other zimgit-water_en
+       get_book other zimgit-medicine_en; get_places
+       echo "  Now pick a map for your area:"; menu_maps ;;
+    q|Q|"") rescan; exit 0 ;;
+  esac
+  rescan
+done

@@ -1,0 +1,48 @@
+#!/bin/sh
+# Opens R.O.U.G.E as its own app window (no tabs or address bar).
+#   rouge-open               normal window
+#   rouge-open --fullscreen  fill the screen (press F11 to leave full screen)
+# Installed to /usr/local/bin/rouge-open.
+
+PORT=8080
+if [ -r /etc/default/rouge ]; then
+  p=$(sed -n 's/^ROUGE_ADDR=.*:\([0-9][0-9]*\)$/\1/p' /etc/default/rouge)
+  [ -n "$p" ] && PORT=$p
+fi
+URL="http://127.0.0.1:$PORT"
+
+# At power-on the desktop can appear before R.O.U.G.E has started.
+# Wait for it (up to 90 seconds), so the window never shows "can't reach this page".
+i=0
+while [ $i -lt 180 ]; do
+  if command -v curl >/dev/null 2>&1; then
+    curl -fs -m 2 -o /dev/null "$URL/api/status" && break
+  else
+    wget -q -T 2 -O /dev/null "$URL/api/status" && break
+  fi
+  i=$((i + 1))
+  sleep 0.5
+done
+
+PROFILE="$HOME/.config/rouge-browser"
+# After the power is pulled, Chromium would ask to "restore pages". Tell it the last exit was clean.
+PREFS="$PROFILE/Default/Preferences"
+if [ -f "$PREFS" ]; then
+  sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]*"/"exit_type":"Normal"/' "$PREFS" 2>/dev/null
+fi
+
+FS=""
+if [ "$1" = "--fullscreen" ]; then FS="--start-fullscreen"; shift; fi
+
+for b in chromium-browser chromium; do
+  if command -v "$b" >/dev/null 2>&1; then
+    # shellcheck disable=SC2086
+    exec "$b" --app="$URL" --user-data-dir="$PROFILE" $FS --start-maximized \
+      --no-first-run --no-default-browser-check --noerrdialogs --disable-infobars \
+      --disable-session-crashed-bubble --password-store=basic \
+      --disable-translate --disable-features=Translate,TranslateUI \
+      --check-for-update-interval=31536000 --overscroll-history-navigation=0 "$@"
+  fi
+done
+if command -v firefox >/dev/null 2>&1; then exec firefox --new-window "$URL"; fi
+exec xdg-open "$URL"
