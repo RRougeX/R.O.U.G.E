@@ -2,7 +2,7 @@
 
 **An offline survival computer for the Raspberry Pi.** Wikipedia, maps, a first-aid and survival field guide, and tools for when the power grid and the internet are down. It runs on a Pi 4 or 5 (or a Zero 2 W) from a power bank, and phones nearby can use it too.
 
-![R.O.U.G.E home screen](docs/screenshots/home.png)
+![R.O.U.G.E home screen](docs/screenshots/cyberdeck.jpg)
 
 ## What it does
 
